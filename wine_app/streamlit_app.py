@@ -15,9 +15,10 @@ st.title("🍷 Wine Quality Prediction App")
 
 st.write(
     """
-    This app predicts **wine quality** using two ML models:
-    - **Regression** → predicts exact quality score  
-    - **Classification** → predicts quality class
+    Predict wine quality using **Machine Learning**.
+    
+    - **Regression** → predicts an exact quality score  
+    - **Classification** → predicts a quality class with confidence  
     """
 )
 
@@ -33,21 +34,26 @@ mode = st.radio(
 st.markdown("---")
 
 # --------------------------------------------------
-# Input fields
+# Input section
 # --------------------------------------------------
 st.subheader("🔢 Enter Wine Chemical Properties")
 
-fixed_acidity = st.number_input("Fixed Acidity", min_value=0.0, value=7.4)
-volatile_acidity = st.number_input("Volatile Acidity", min_value=0.0, value=0.7)
-citric_acid = st.number_input("Citric Acid", min_value=0.0, value=0.0)
-residual_sugar = st.number_input("Residual Sugar", min_value=0.0, value=1.9)
-chlorides = st.number_input("Chlorides", min_value=0.0, value=0.076)
-free_sulfur_dioxide = st.number_input("Free Sulfur Dioxide", min_value=0.0, value=11.0)
-total_sulfur_dioxide = st.number_input("Total Sulfur Dioxide", min_value=0.0, value=34.0)
-density = st.number_input("Density", min_value=0.0, value=0.9978, format="%.4f")
-ph = st.number_input("pH", min_value=0.0, value=3.51)
-sulphates = st.number_input("Sulphates", min_value=0.0, value=0.56)
-alcohol = st.number_input("Alcohol", min_value=0.0, value=9.4)
+col1, col2 = st.columns(2)
+
+with col1:
+    fixed_acidity = st.slider("Fixed Acidity", 4.0, 16.0, 7.4)
+    volatile_acidity = st.slider("Volatile Acidity", 0.1, 1.5, 0.7)
+    citric_acid = st.slider("Citric Acid", 0.0, 1.0, 0.0)
+    residual_sugar = st.slider("Residual Sugar", 0.5, 15.0, 1.9)
+    chlorides = st.slider("Chlorides", 0.01, 0.3, 0.076)
+
+with col2:
+    free_sulfur_dioxide = st.slider("Free Sulfur Dioxide", 1, 80, 11)
+    total_sulfur_dioxide = st.slider("Total Sulfur Dioxide", 6, 300, 34)
+    density = st.slider("Density", 0.990, 1.005, 0.9978)
+    ph = st.slider("pH", 2.8, 4.2, 3.51)
+    sulphates = st.slider("Sulphates", 0.3, 2.0, 0.56)
+    alcohol = st.slider("Alcohol", 8.0, 15.0, 9.4)
 
 input_data = [
     fixed_acidity,
@@ -62,6 +68,27 @@ input_data = [
     sulphates,
     alcohol
 ]
+
+# --------------------------------------------------
+# Input warnings (soft validation)
+# --------------------------------------------------
+st.markdown("---")
+st.subheader("⚠️ Input Validation")
+
+warnings = []
+
+if alcohol < 9:
+    warnings.append("Low alcohol may result in lower quality.")
+if volatile_acidity > 1.0:
+    warnings.append("High volatile acidity often reduces wine quality.")
+if density > 1.000:
+    warnings.append("High density usually indicates lower alcohol.")
+
+if warnings:
+    for w in warnings:
+        st.warning(w)
+else:
+    st.success("Inputs look reasonable.")
 
 # --------------------------------------------------
 # Prediction
@@ -80,12 +107,11 @@ if st.button("🔮 Predict Wine Quality"):
     else:
         st.success(
             f"🍷 Predicted Quality Score: {result['prediction']}\n"
-            f"🏷 Category: {result['label']}"
+            f"🏷 Interpreted Category: {result['label']}"
         )
 
-
     # --------------------------------------------------
-    # Feature Importance (OPTION 1)
+    # Feature importance
     # --------------------------------------------------
     st.subheader("🔍 Feature Importance")
 
@@ -101,5 +127,3 @@ if st.button("🔮 Predict Wine Quality"):
         ax.set_title(f"{mode.capitalize()} Model Feature Importance")
 
         st.pyplot(fig)
-    else:
-        st.info("Feature importance not available for this model.")
