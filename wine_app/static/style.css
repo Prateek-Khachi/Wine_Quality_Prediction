@@ -1,0 +1,38 @@
+/* Base */
+body {
+    font-family: "Segoe UI", sans-serif;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* Light mode */
+.light-mode {
+    background-color: #f8f9fa;
+    color: #000;
+}
+
+/* Dark mode */
+.dark-mode {
+    background-color: #121212;
+    color: #f1f1f1;
+}
+
+.dark-mode .card,
+.dark-mode .modal-content {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+}
+
+.dark-mode .form-control,
+.dark-mode .form-select {
+    background-color: #2c2c2c;
+    color: #fff;
+    border-color: #444;
+}
+
+.card {
+    border-radius: 14px;
+}
+
+.modal-content {
+    border-radius: 14px;
+}

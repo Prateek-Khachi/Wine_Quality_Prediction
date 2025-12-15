@@ -11,7 +11,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("🍷 Wine Quality Prediction App")
+st.title("🍷 WINOGRADE -Wine Quality")
 
 st.write(
     """
